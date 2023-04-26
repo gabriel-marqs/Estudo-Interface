@@ -26,29 +26,27 @@ public class Program {
 		double pricePerDay = sc.nextDouble();
 		System.out.println();
 		
-		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		LocalDateTime pickup = LocalDateTime.parse(pickupStr.substring(0, 14) + "00:" + pickupStr.substring(14), fmt);
-		LocalDateTime rtrn = LocalDateTime.parse(returnStr.substring(0, 14) + "00:" + returnStr.substring(14), fmt);
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		LocalDateTime pickup = LocalDateTime.parse(pickupStr, fmt);
+		LocalDateTime rtrn = LocalDateTime.parse(returnStr, fmt);
 		
 		Duration duration = Duration.between(pickup, rtrn);
 		
 		long days = duration.toDays();
 		long hours = duration.toHours() % 24;
-		long seconds = duration.toSeconds() % 60;
-		
-		System.out.println("Duration: " + days + " - " + hours + ":" + seconds);
+		long minutes = duration.toMinutes() % 60;
 		
 		double price = 0;
 		double tax = 0;
 		
 		if (hours <= 12 && days == 0) {
-			if (seconds > 0) {
+			if (minutes > 0) {
 				hours++;
 			}
 			price = hours * pricePerHour;
 		}
 		else {
-			if (hours > 0 || seconds > 0) {
+			if (hours > 0 || minutes > 0) {
 				days++;
 			}
 			price = days * pricePerDay;
